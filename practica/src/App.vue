@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ContenidoComponent from './components/ContenidoComponent.vue'
+import ContenidoComponent from './components/ContenidoComponent1.vue'
 import VueSidebarMenuAkahon from "vue-sidebar-menu-akahon";
 export default {
   name: 'App',
