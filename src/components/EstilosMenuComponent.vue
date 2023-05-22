@@ -39,12 +39,14 @@
       </b-row>
       <b-row>
        <div > 
-        <v-simple-table  v-for="(estilo,index) in ItemsColor" :key="index"  >
+        <v-simple-table  v-for="(modelo,index) in ItemsColor" :key="index"  >
           <template v-slot:default>
             <thead>
               <tr>
                 <th class="text-left">
                   Estilo
+                </th>
+                <th class="text-left">
                 </th>
                 <th class="text-left">
                   Color
@@ -76,9 +78,18 @@
               </tr>
               </thead>
               <tbody>
-                  <tr v-for="item in estilo" :key="item.name">
-                      <td>{{ item.ItmsGrpNam }}</td>
-                  <td>{{ item.ColorDesc }}</td>
+                  <tr v-for="(item,index) in modelo" :key="index">
+                    <td>{{item.estilo}}</td>
+                    <td>{{item.descripcion}}</td>
+                    <td><input type="color" class="form-control form-control-color rounded-5" disabled  :value="item.color"></td>
+                    <td>{{item.s}}</td>
+                    <td>{{item.M}}</td>
+                    <td>{{item.L}}</td>
+                    <td>{{item.XL}}</td>
+                    <td>{{item.XL2}}</td>
+                    <td>{{item.XL3}}</td>
+                    <td>{{item.XL4}}</td>
+                    <td>{{item.XL5}}</td>
                 </tr>
               </tbody>
           </template>
@@ -117,11 +128,10 @@
                 aux[elemento.ColorHex]=true;
                 return {exist};
               });
-              console.log("tamaño "+response.data.data.length);
               this.Items[i]=response.data.data;
               arraux.forEach(elemento=>(
               this.colores.push({
-                title: elemento["ColorHex"]+" "+elemento["ColorDesc"],
+                title:elemento["ColorDesc"],
                 ColorHex:elemento["ColorHex"],
                 Color:elemento["Color"]
               })
@@ -146,51 +156,134 @@
 
           }
     },
-    LlenarTablas(colores){/*
-          console.log(colores);
-          console.log(colores.length);*/
+    LlenarTablas(colores){
+      //var arraux=[];
           for(var i=0;i<this.Items.length;i++){
-            for(var j=0;j<colores.length;j++)
+            for(var j=0;j<colores.length;j++){
+              var cadena=[{
+                  id:"",
+                  estilo:"",
+                  color:"",
+                  descripcion:"",
+                  s:"0",
+                  M:"0",
+                  L:"0",
+                  XL:"0",
+                  XL2:"0",
+                  XL3:"0",
+                  XL4:"0",
+                  XL5:"0"
+              }];
               if(this.ItemsColor[i] != undefined){
-                console.log("no undefined");
+               
                 let aux=this.Items[i].filter(function(elemento){
                               return elemento.Color==colores[j];
                             });
-                console.log("aux:");
-                console.log(aux);
-                console.log("itemscolor[i]:");
-                console.log(this.ItemsColor[i]);
-                let final=[this.ItemsColor[i],aux].flat();
-                this.ItemsColor[i]=final;
+                            
+                            aux.forEach((elemento) => {
+                    cadena[0].id=j;
+                    cadena[0].estilo=elemento.ItmsGrpNam;
+                    cadena[0].color=elemento.ColorHex;
+                    
+                    cadena[0].descripcion=elemento.ItemName;
+                    switch(elemento.Talla){
+                      case "s":
+                        cadena[0].s=elemento.Stock;
+                      break;
+                      case "M":
+                      cadena[0].M=elemento.Stock;
+                      break;
+                      case "L":
+                      cadena[0].L=elemento.Stock;
+                      break;
+                      case "XL":
+                      cadena[0].XL=elemento.Stock;
+                      break;
+                      case "2XL":
+                      cadena.XL2=elemento.Stock;
+                      break;
+                      case "3xl":
+                      cadena[0].XL3=elemento.Stock;
+                      break;
+                      case "4XL":
+                      cadena[0].XL4=elemento.Stock;
+                      break;
+                      case "5xl":
+                      cadena[0].XL5=elemento.Stock;
+                      break;
+
+                    }
+                  });
+                let suma=cadena[0].s+cadena[0].L+cadena[0].M+cadena[0].XL+cadena[0].XL2+cadena[0].XL3+cadena[0].XL4+cadena[0].XL5;
+                if(suma>0){
+                  let final=[this.ItemsColor[i],cadena].flat();
+                  this.ItemsColor[i]=final;
+                }  
+                
               }else{
-                console.log(" undefined");
+               
                 var aux=this.Items[i].filter(function(elemento){
                               return elemento.Color==colores[j];
                             });
-                console.log(aux);
                 if(aux.length>0){
-                  console.log("aux es malloy que 0")
-                  this.ItemsColor[i]=aux;
-                }
+                  //this.ItemsColor[i]=aux;
+                  aux.forEach((elemento) => {
+                    cadena[0].estilo=elemento.ItmsGrpNam;
+                    cadena[0].color=elemento.ColorHex;
+                    cadena[0].descripcion=elemento.ItemName;
+                    switch(elemento.Talla){
+                      case "S":
+                        cadena[0].s=elemento.Stock;
+                      break;
+                      case "M":
+                      cadena[0].M=elemento.Stock;
+                      break;
+                      case "L":
+                      cadena[0].L=elemento.Stock;
+                      break;
+                      case "XL":
+                      cadena[0].XL=elemento.Stock;
+                      break;
+                      case "2XL":
+                      cadena[0].XL2=elemento.Stock;
+                      break;
+                      case "3xl":
+                      cadena[0].XL3=elemento.Stock;
+                      break;
+                      case "4XL":
+                      cadena[0].XL4=elemento.Stock;
+                      break;
+                      case "5xl":
+                      cadena[0].XL5=elemento.Stock;
+                      break;
+
+                    }
+                  });
+                let suma=cadena[0].s+cadena[0].L+cadena[0].M+cadena[0].XL+cadena[0].XL2+cadena[0].XL3+cadena[0].XL4+cadena[0].XL5;
+                if(suma>0)
+                this.ItemsColor[i]=cadena;  
+              }
+
+            }
             }            
           }
-          console.log(this.ItemsColor);
+        //var very=[];
+        this.ItemsColor.forEach(e=>{
+          //if(e=>)
+          console.log(e.length);
+        });
      },
     changeColorState(colores){
-          console.log(colores);
           //this.ItemsColor=[];
           this.DibuarTablas=false;
           this.ItemsColor=[];
-          console.log("limpiar items color tam "+this.ItemsColor.length);
-          if(colores!=""){
+           if(colores!=""){
             this.LlenarTablas(colores);
             
           }else{
             //this.colores=[]
           }
           this.DibuarTablas=true;
-          console.log("itemscolor tamaño"+this.ItemsColor.length);
-          console.log(this.ItemsColor);
     }
     },
       mounted(){
